@@ -166,9 +166,9 @@ export default {
       this.localTime = new Date().getTime();
       this.timeLast =
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
-      if (this.timeLast <= 1000) this.bulidOrder();
+      if (this.timeLast <= 1000);
       if (this.timeLast <= 0) {
-        this.submitOrder();
+        this.bulidOrder().then(setTimeout(this.submitOrder, 5e2));
         this.stopTimer();
       }
     },
