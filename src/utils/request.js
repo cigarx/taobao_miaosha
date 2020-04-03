@@ -5,7 +5,7 @@ import { getSign } from './enc'
 import qs from 'qs'
 const appKey = '12574478'
 
-const request = (obj) => new Promise((resolve, reject) => {
+const request = (obj, proxyFlag = false) => new Promise((resolve, reject) => {
     let time = new Date().getTime()
     obj = {
         headers: {
@@ -19,13 +19,18 @@ const request = (obj) => new Promise((resolve, reject) => {
         url: obj.url,
         method: obj.method,
         responseEncoding: obj.responseEncoding || 'utf8',
-        responseType: obj.responseType || 'json'
+        responseType: obj.responseType || 'json',
+        proxyFlag: proxyFlag
     }
 
     sendMessage(obj, 'request')
         .then(res => {
             let newTime = new Date().getTime()
             console.log('网络请求：用时' + (newTime - time) + 'ms')
+
+            if (res.response.err) {
+                console.error('请求失败，node Axios：' + JSON.stringify(res.response))
+            }
             try {
                 resolve(res.response.data)
             } catch (e) {

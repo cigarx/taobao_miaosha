@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
+const webpack = require('webpack')
+
 module.exports = {
     // target: 'node',
     entry: {
@@ -12,6 +14,10 @@ module.exports = {
         alias: {
             'vue$': 'vue/dist/vue.esm.js' // 用 webpack 1 时需用 'vue/dist/vue.common.js'
         }
+    },
+    devServer: {
+        contentBase: "./dist",
+        hot: true
     },
     devtool: 'cheap-module-eval-source-map',
     output: {
@@ -42,6 +48,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html'
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
     ]
 }

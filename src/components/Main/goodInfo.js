@@ -88,7 +88,7 @@ async function parseUrl(url) {
             data = data.data
             let apiStack = JSON.parse(data.apiStack[0].value)
             console.log(apiStack)
-            ans.systemTime = apiStack.otherInfo.systemTime
+            // ans.systemTime = apiStack.otherInfo.systemTime
             let divisionCode = apiStack.trade.buyParam.areaId
             ans.divisionCode = divisionCode
             ans.skus = data.skuBase.skus

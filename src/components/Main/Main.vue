@@ -3,8 +3,12 @@
     <div class="options">
       <div>cookie</div>
 
+      <button @click="testIP">测试ip</button>
+      <button @click="saveCookie">保存cookies</button>
+      <button @click="readCookie">读取cookies</button>
       <input type="text" v-model="cookie" />
       <button @click="setCookie">设置cookie</button>
+      <button @click="loginTaobao">登录淘宝</button>
       <!-- <button @click="loadGood()">加载商品</button> -->
       <button @click="getSystemTime">获取淘宝时间差</button>
       <button @click="startTimer">开始计时</button>
@@ -31,7 +35,7 @@
     <div class="goodInfo">
       <div>商品地址</div>
       <input type="text" v-model="url" />
-      <button @click="parseUrl(e)">解析地址</button>
+      <button @click="parseUrl()">解析地址</button>
 
       <div class="skuBox">
         <div v-for="(item, key) in skuProps" :key="key">
@@ -40,6 +44,7 @@
             @change="selectSku(item, 'select' + key, key)"
             :ref="'select' + key"
           >
+            <option value="default">请选择</option>
             <option v-for="(i, k) in item.values" :key="k" :value="i.vid">{{i.name}}</option>
           </select>
           <!-- <div v-for="(i, k) in item.values" :key="k">{{i.name}}</div> -->
@@ -84,6 +89,8 @@ import { getSystemTime } from "./time";
 import { bulidOrder, submitOrder } from "../../utils/request";
 import { parseUrl } from "./goodInfo";
 import { setCookieById, addCookies } from "../../utils/cookie";
+import { loginTaobao, readLoginUsers, saveLoginUsers } from "./login";
+import { testIP } from "./testIP";
 export default {
   data() {
     return {
@@ -123,8 +130,9 @@ export default {
     };
   },
   mounted() {
+    this.readCookie();
     this.getSystemTime();
-    this.timerGetSystem = setInterval(this.getSystemTime, 3e4);
+    this.timerGetSystem = setInterval(this.getSystemTime, 18e4);
   },
   watch: {
     currentSku: {
@@ -144,9 +152,22 @@ export default {
     }
   },
   methods: {
+    testIP() {
+      testIP().then(res => {
+        console.log(res.data);
+      });
+    },
+    readCookie() {
+      readLoginUsers();
+    },
+    saveCookie() {
+      saveLoginUsers();
+    },
+    loginTaobao() {
+      loginTaobao();
+    },
     getSystemTime() {
       getSystemTime().then(res => {
-        console.log(res);
         this.systemTimeFastThenLocal = +res.data.data.t - new Date().getTime();
       });
     },
@@ -166,9 +187,9 @@ export default {
       this.localTime = new Date().getTime();
       this.timeLast =
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
-      if (this.timeLast <= 1000);
       if (this.timeLast <= 0) {
-        this.bulidOrder().then(setTimeout(this.submitOrder, 5e2));
+        let time = new Date().getTime();
+        this.bulidOrder().then(setTimeout(this.submitOrder, 7e2));
         this.stopTimer();
       }
     },

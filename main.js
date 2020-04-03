@@ -14,10 +14,12 @@ function createWindow() {
   })
 
   // 并且为你的应用加载index.html
-  //   win.loadURL('http://localhost:8080')
-  win.loadFile('./dist/index.html')
+  win.loadURL('http://localhost:8080')
+  // win.loadFile('./dist/index.html')
   // 打开开发者工具
   win.webContents.openDevTools()
+
+
 }
 
 // This method will be called when Electron has finished
@@ -46,6 +48,8 @@ app.on('activate', () => {
 // code. 也可以拆分成几个文件，然后用 require 导入。
 
 require('./node/request')
+
+require('./node/nLogin')
 
 // ipcMain.on('request', (event, arg) => {
 //   console.log(arg)
