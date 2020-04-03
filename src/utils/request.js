@@ -3,13 +3,15 @@ import { sendMessage } from './message'
 import { getCookiesById, getCookieValueByName, setCookieById, getToken } from './cookie'
 import { getSign } from './enc'
 import qs from 'qs'
+import { getGlobalProxy } from './proxy'
 const appKey = '12574478'
 
 let _proxyFlag = false
 
 
 
-const request = (obj) => new Promise((resolve, reject) => {
+const request = (obj, proxyFlag = true) => new Promise((resolve, reject) => {
+    console.log(!proxyFlag ? null : (_proxyFlag ? (getGlobalProxy() || null) : null))
     let time = new Date().getTime()
     obj = {
         headers: {
@@ -24,7 +26,7 @@ const request = (obj) => new Promise((resolve, reject) => {
         method: obj.method,
         responseEncoding: obj.responseEncoding || 'utf8',
         responseType: obj.responseType || 'json',
-        proxy: _proxyFlag ? (obj.proxy || null) : null
+        proxy: !proxyFlag ? null : (_proxyFlag ? (getGlobalProxy() || null) : null)
     }
 
     sendMessage(obj, 'request')

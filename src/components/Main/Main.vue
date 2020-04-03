@@ -107,7 +107,10 @@ export default {
       url: "https://m.tb.cn/h.VgsmffJ?sm=e8a7ad",
       skus: [],
       skuProps: [],
-      proxy: {},
+      proxy: {
+        host: "",
+        port: ""
+      },
       currentSku: [],
       currentSkuStr: "",
       currentSkuId: "",
@@ -165,6 +168,7 @@ export default {
     getProxy() {
       getProxy().then(res => {
         if (!res.err) {
+          console.log(res.proxy);
           this.proxy = res.proxy;
         } else {
           console.log(res);

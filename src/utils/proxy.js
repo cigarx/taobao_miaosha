@@ -1,4 +1,5 @@
 import { request } from './request'
+let proxy = {}
 const getProxy = () => {
     return new Promise(resolve => {
         request({
@@ -10,13 +11,15 @@ const getProxy = () => {
                 console.log(data)
                 resolve({ err: true, msg: '获取代理失败', data })
             } else {
-                let proxy = data.RESULT[0]
-                if (proxy && proxy.ip) {
+                let proxyT = data.RESULT[0]
+                if (proxyT && proxyT.ip) {
+                    proxy = {
+                        host: proxyT.ip,
+                        port: +proxyT.port
+                    }
                     resolve({
-                        err: false, proxy: {
-                            host: proxy.ip,
-                            port: +proxy.port
-                        }
+                        err: false,
+                        proxy: Object.assign(proxy)
                     })
                 } else {
                     resolve({ err: true, msg: '获取代理失败', data })
@@ -25,8 +28,10 @@ const getProxy = () => {
         })
     })
 }
+const getGlobalProxy = () => proxy
 
 
 export {
-    getProxy
+    getProxy,
+    getGlobalProxy
 }
