@@ -131,7 +131,8 @@ export default {
       localTime: 0,
       timeLast: 0, //为0 提交
       timer: 0,
-      timerGetSystem: 0
+      timerGetSystem: 0,
+      proxychangeFlag: false //提交前10s换代理
     };
   },
   mounted() {
@@ -199,12 +200,18 @@ export default {
       this.targetTime = date.getTime();
     },
     startTimer() {
+      this.proxychangeFlag = false;
       this.timer = setInterval(this.loop, 10);
     },
     loop() {
       this.localTime = new Date().getTime();
       this.timeLast =
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
+      if (this.timeLast <= 10e3) {
+        if (!this.proxychangeFlag) {
+          this.proxychangeFlag = true;
+        }
+      }
       if (this.timeLast <= 0) {
         let time = new Date().getTime();
         this.bulidOrder().then(setTimeout(this.submitOrder, 4e2));
