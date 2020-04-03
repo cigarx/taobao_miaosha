@@ -1,8 +1,8 @@
 <template>
   <div class="mainBox">
     <div class="options">
-      <div>cookie</div>
-
+      <div>cookie</div>proxy
+      <input v-model="proxy" type="checkbox" />
       <button @click="testIP">测试ip</button>
       <button @click="saveCookie">保存cookies</button>
       <button @click="readCookie">读取cookies</button>
@@ -86,7 +86,7 @@
 
 <script>
 import { getSystemTime } from "./time";
-import { bulidOrder, submitOrder } from "../../utils/request";
+import { bulidOrder, submitOrder, setProxy } from "../../utils/request";
 import { parseUrl } from "./goodInfo";
 import { setCookieById, addCookies } from "../../utils/cookie";
 import { loginTaobao, readLoginUsers, saveLoginUsers } from "./login";
@@ -107,6 +107,7 @@ export default {
       currentSku: [],
       currentSkuStr: "",
       currentSkuId: "",
+      proxy: false,
       orderData: {
         itemId: "",
         skuId: 0,
@@ -135,6 +136,10 @@ export default {
     this.timerGetSystem = setInterval(this.getSystemTime, 18e4);
   },
   watch: {
+    proxy(newValue, oldValue) {
+      console.log(newValue);
+      setProxy(newValue);
+    },
     currentSku: {
       handler(newValue, oldValue) {
         this.currentSkuStr = newValue.join(";");

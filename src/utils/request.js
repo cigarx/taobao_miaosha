@@ -5,6 +5,10 @@ import { getSign } from './enc'
 import qs from 'qs'
 const appKey = '12574478'
 
+let _proxyFlag = false
+
+
+
 const request = (obj, proxyFlag = false) => new Promise((resolve, reject) => {
     let time = new Date().getTime()
     obj = {
@@ -20,7 +24,7 @@ const request = (obj, proxyFlag = false) => new Promise((resolve, reject) => {
         method: obj.method,
         responseEncoding: obj.responseEncoding || 'utf8',
         responseType: obj.responseType || 'json',
-        proxyFlag: proxyFlag
+        proxyFlag: _proxyFlag || proxyFlag
     }
 
     sendMessage(obj, 'request')
@@ -179,11 +183,16 @@ async function submitOrder(data, orderInfo) {
     return res
 }
 
+const setProxy = (flag) => {
+    _proxyFlag = flag
+}
+
 export {
     bulidOrder,
     submitOrder,
     request,
-    appKey
+    appKey,
+    setProxy
 }
 
 
