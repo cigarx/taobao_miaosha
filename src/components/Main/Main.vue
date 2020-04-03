@@ -211,10 +211,10 @@ export default {
       this.localTime = new Date().getTime();
       this.timeLast =
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
-      if (this.timeLast <= 10e3) {
+      if (this.timeLast <= 3e4) {
         if (!this.proxychangeFlag) {
           this.getProxy();
-          this.bulidOrder();//尝试创建订单
+          this.bulidOrder(); //尝试创建订单
           this.proxychangeFlag = true;
         }
       }
