@@ -213,13 +213,15 @@ export default {
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
       if (this.timeLast <= 10e3) {
         if (!this.proxychangeFlag) {
+          this.getProxy();
+          this.bulidOrder();//尝试创建订单
           this.proxychangeFlag = true;
         }
       }
       if (this.timeLast <= 0) {
         let time = new Date().getTime();
         this.bulidOrder().then(() => {
-          setTimeout(this.submitOrder, 4e2);
+          setTimeout(this.submitOrder, 2e2);
         });
         this.stopTimer();
       }
