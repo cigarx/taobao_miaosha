@@ -5,11 +5,11 @@ let proxyList = []
 
 let currentProxyIndex = 0
 
-const PROXYLENG = 3
+const PROXYLENG = 1
 
 let currRequestNum = 2000
 
-const MAX_PROXY_REQUEST_NUM = 50
+const MAX_PROXY_REQUEST_NUM = 0
 
 const getProxy = () => {
     return new Promise(resolve => {

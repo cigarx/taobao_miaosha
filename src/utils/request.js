@@ -9,7 +9,7 @@ let _proxyFlag = false
 
 
 
-const request = (obj, proxyFlag = false) => new Promise((resolve, reject) => {
+const request = (obj) => new Promise((resolve, reject) => {
     let time = new Date().getTime()
     obj = {
         headers: {
@@ -24,7 +24,7 @@ const request = (obj, proxyFlag = false) => new Promise((resolve, reject) => {
         method: obj.method,
         responseEncoding: obj.responseEncoding || 'utf8',
         responseType: obj.responseType || 'json',
-        proxyFlag: _proxyFlag || proxyFlag
+        proxy: _proxyFlag ? (obj.proxy || null) : null
     }
 
     sendMessage(obj, 'request')
@@ -85,7 +85,8 @@ const _tryBulidOrder = obj => {
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
                 'Referer': `https://buy.m.tmall.com/order/confirmOrderWap.htm?enc=%3F&itemId=${itemId}&exParams=%7B%22etm%22%3A%22%22%7D&skuId=${skuId}&quantity=${quantity}&divisionCode=${divisionCode}&userId=${userId}&buyNow=true&_input_charset=utf-8&areaId=${divisionCode}&x-itemid=${itemId}&x-uid=${userId}`
-            }
+            },
+            proxy: obj.proxy
         }
     )
 }
@@ -174,7 +175,8 @@ const _trySubmitOrder = (data, orderInfo) => {
             'Content-type': 'application/x-www-form-urlencoded',
             'Referer': `https://buy.m.tmall.com/order/confirmOrderWap.htm?enc=%E2%84%A2&itemId=${itemId}&exParams=%7B%22etm%22%3A%22%22%7D&skuId=${skuId}&quantity=${quantity}&divisionCode=${divisionCode}&userId=${userId}&buyNow=true&_input_charset=utf-8&areaId=${divisionCode}&x-itemid=${itemId}&x-uid=${userId}`,
             'Host': 'h5api.m.tmall.com'
-        }
+        },
+        proxy: orderInfo.proxy
     })
 }
 

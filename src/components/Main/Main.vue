@@ -2,7 +2,9 @@
   <div class="mainBox">
     <div class="options">
       <div>cookie</div>proxy
-      <input v-model="proxy" type="checkbox" />
+      <input v-model="proxyFlag" type="checkbox" />
+      代理IP:{{proxy.host}}:{{proxy.port}}
+      <button @click="getProxy">获取代理ip</button>
       <button @click="testIP">测试ip</button>
       <button @click="saveCookie">保存cookies</button>
       <button @click="readCookie">读取cookies</button>
@@ -91,6 +93,7 @@ import { parseUrl } from "./goodInfo";
 import { setCookieById, addCookies } from "../../utils/cookie";
 import { loginTaobao, readLoginUsers, saveLoginUsers } from "./login";
 import { testIP } from "./testIP";
+import { getProxy } from "../../utils/proxy";
 export default {
   data() {
     return {
@@ -104,10 +107,11 @@ export default {
       url: "https://m.tb.cn/h.VgsmffJ?sm=e8a7ad",
       skus: [],
       skuProps: [],
+      proxy: {},
       currentSku: [],
       currentSkuStr: "",
       currentSkuId: "",
-      proxy: false,
+      proxyFlag: false,
       orderData: {
         itemId: "",
         skuId: 0,
@@ -136,7 +140,7 @@ export default {
     this.timerGetSystem = setInterval(this.getSystemTime, 18e4);
   },
   watch: {
-    proxy(newValue, oldValue) {
+    proxyFlag(newValue, oldValue) {
       console.log(newValue);
       setProxy(newValue);
     },
@@ -157,8 +161,17 @@ export default {
     }
   },
   methods: {
+    getProxy() {
+      getProxy().then(res => {
+        if (!res.err) {
+          this.proxy = res.proxy;
+        } else {
+          console.log(res);
+        }
+      });
+    },
     testIP() {
-      testIP().then(res => {
+      testIP(this.proxy).then(res => {
         console.log(res.data);
       });
     },
@@ -194,7 +207,7 @@ export default {
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
       if (this.timeLast <= 0) {
         let time = new Date().getTime();
-        this.bulidOrder().then(setTimeout(this.submitOrder, 7e2));
+        this.bulidOrder().then(setTimeout(this.submitOrder, 4e2));
         this.stopTimer();
       }
     },
@@ -231,7 +244,10 @@ export default {
     },
     bulidOrder() {
       return new Promise(resolve => {
-        bulidOrder(this.orderData).then(res => {
+        bulidOrder({
+          ...this.orderData,
+          proxy: this.proxy
+        }).then(res => {
           console.log(res);
           this.submitref = res.data.global.secretValue;
           this.orderInfo = res.data;
@@ -240,7 +256,10 @@ export default {
       });
     },
     submitOrder() {
-      submitOrder(this.orderInfo, this.orderData).then(res => {
+      submitOrder(this.orderInfo, {
+        ...this.orderData,
+        proxy: this.proxy
+      }).then(res => {
         console.log(res);
       });
     }

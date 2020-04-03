@@ -1,7 +1,7 @@
 
 const { ipcMain } = require('electron')
 const axios = require('axios')
-const { getProxy } = require('./proxy')
+// const { getProxy } = require('./proxy')
 
 
 ipcMain.on('request', request)
@@ -10,16 +10,18 @@ async function request(event, arg) {
     try {
 
         let requestOptions = arg.message;
-        let proxy = null
-        if (requestOptions.proxyFlag == true)
-            proxy = await getProxy()
-        if (proxy) {
-            proxy = {
-                host: proxy.ip,
-                port: +proxy.port
-            }
-            requestOptions.proxy = proxy
-        }
+
+        // let proxy = null
+        // if (requestOptions.proxyFlag == true)
+        //     proxy = await getProxy()
+        // if (proxy) {
+        //     proxy = {
+        //         host: proxy.ip,
+        //         port: +proxy.port
+        //     }
+        //     requestOptions.proxy = proxy
+        // }
+
         let res = await axios.request(requestOptions)
         event.reply('request', { id: arg.id, response: { err: false, data: res } })
     } catch (e) {
