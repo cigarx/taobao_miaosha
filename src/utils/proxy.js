@@ -5,7 +5,7 @@ const getProxy = () => {
         request({
             url: "http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=142e63b2c3924466853b5d35b8eb7b97&orderno=YZ20195272809qS8fyz&returnType=2&count=1",
             method: "GET"
-        }).then(res => {
+        }, false).then(res => {
             let { data } = res
             if (data.ERRORCODE != '0') {
                 console.log(data)
