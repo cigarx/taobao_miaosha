@@ -218,7 +218,9 @@ export default {
       }
       if (this.timeLast <= 0) {
         let time = new Date().getTime();
-        this.bulidOrder().then(setTimeout(this.submitOrder, 4e2));
+        this.bulidOrder().then(() => {
+          setTimeout(this.submitOrder, 4e2);
+        });
         this.stopTimer();
       }
     },
