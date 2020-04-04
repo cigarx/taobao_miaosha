@@ -226,11 +226,15 @@ export default {
       if (this.timeLast <= 6e4) {
         if (!this.proxychangeFlag) {
           if (this.adslFlag) {
-            adslDel();
+            adslDel().then(res => {
+              this.bulidOrder(); //尝试创建订单
+            });
           } else if (this.proxyFlag) {
             this.getProxy();
+            this.bulidOrder(); //尝试创建订单
+          } else {
+            this.bulidOrder(); //尝试创建订单
           }
-          this.bulidOrder(); //尝试创建订单
           this.proxychangeFlag = true;
         }
       }
