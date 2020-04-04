@@ -3,8 +3,11 @@
     <div class="options">
       <div>cookie</div>proxy
       <input v-model="proxyFlag" type="checkbox" />
+      是否拨号
+      <input v-model="adslFlag" type="checkbox" />
       代理IP:{{proxy.host}}:{{proxy.port}}
       <button @click="getProxy">获取代理ip</button>
+
       <button @click="testIP">测试ip</button>
       <button @click="saveCookie">保存cookies</button>
       <button @click="readCookie">读取cookies</button>
@@ -87,6 +90,7 @@
 </template>
 
 <script>
+import { adslDel } from "./adsl";
 import { getSystemTime } from "./time";
 import { bulidOrder, submitOrder, setProxy } from "../../utils/request";
 import { parseUrl } from "./goodInfo";
@@ -135,7 +139,8 @@ export default {
       timeLast: 0, //为0 提交
       timer: 0,
       timerGetSystem: 0,
-      proxychangeFlag: false //提交前10s换代理
+      proxychangeFlag: false, //提交前10s换代理
+      adslFlag: true
     };
   },
   mounted() {
@@ -144,8 +149,15 @@ export default {
     this.timerGetSystem = setInterval(this.getSystemTime, 18e4);
   },
   watch: {
+    adslFlag(newValue) {
+      if (newValue) {
+        this.proxyFlag = false;
+        setProxy(false);
+      }
+    },
     proxyFlag(newValue, oldValue) {
       console.log(newValue);
+      if (this.adslFlag) return false;
       setProxy(newValue);
     },
     currentSku: {
@@ -211,9 +223,13 @@ export default {
       this.localTime = new Date().getTime();
       this.timeLast =
         this.targetTime - this.systemTimeFastThenLocal - this.localTime;
-      if (this.timeLast <= 3e4) {
+      if (this.timeLast <= 6e4) {
         if (!this.proxychangeFlag) {
-          this.getProxy();
+          if (this.adslFlag) {
+            adslDel();
+          } else if (this.proxyFlag) {
+            this.getProxy();
+          }
           this.bulidOrder(); //尝试创建订单
           this.proxychangeFlag = true;
         }
