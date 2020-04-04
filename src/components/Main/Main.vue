@@ -240,9 +240,11 @@ export default {
       }
       if (this.timeLast <= 0) {
         let time = new Date().getTime();
-        this.bulidOrder().then(() => {
-          setTimeout(this.submitOrder, 2e2);
-        });
+        setTimeout(() => {
+          this.bulidOrder().then(() => {
+            setTimeout(this.submitOrder, 3e2);
+          });
+        }, 1e2);
         this.stopTimer();
       }
     },
@@ -299,12 +301,10 @@ export default {
         proxy: this.proxy
       }).then(res => {
         console.log(res);
-        console.log((res.data.ret))
-        console.log(/哎呦喂/.test(res.data.ret[0]))
         if (
           res.data &&
           res.data.ret.length > 1 &&
-          /哎呦喂/.test(res.data.ret[0])
+          /FAIL_SYS_TRAFFIC_LIMIT/.test(res.data.ret[0])
         ) {
           setTimeout(() => this.submitOrder(time + 1), 2e2);
         }
