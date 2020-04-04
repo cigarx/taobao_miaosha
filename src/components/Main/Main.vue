@@ -290,12 +290,22 @@ export default {
         });
       });
     },
-    submitOrder() {
+    submitOrder(time = 0) {
+      if (time > 3) {
+        return;
+      }
       submitOrder(this.orderInfo, {
         ...this.orderData,
         proxy: this.proxy
       }).then(res => {
         console.log(res);
+        if (
+          res.data &&
+          res.data.ret.length > 1 &&
+          /哎呦喂/.text(res.data.ret[0])
+        ) {
+          setTimeout(() => this.submitOrder(time + 1), 2e2);
+        }
       });
     }
   }
