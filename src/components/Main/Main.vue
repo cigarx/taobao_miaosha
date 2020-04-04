@@ -293,7 +293,7 @@ export default {
       });
     },
     submitOrder(time = 0) {
-      if (time > 3) {
+      if (time > 1) {
         return;
       }
       submitOrder(this.orderInfo, {
