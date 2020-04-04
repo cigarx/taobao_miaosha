@@ -299,6 +299,8 @@ export default {
         proxy: this.proxy
       }).then(res => {
         console.log(res);
+        console.log((res.data.ret))
+        console.log(/哎呦喂/.test(res.data.ret[0]))
         if (
           res.data &&
           res.data.ret.length > 1 &&
