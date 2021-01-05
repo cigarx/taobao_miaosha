@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "electron": "^8.2.0",
     "qs": "^6.9.3",
     "request": "^2.88.2",
