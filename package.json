@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
-    "electron": "^8.2.0",
+    "electron": "^13.6.6",
     "qs": "^6.9.3",
     "request": "^2.88.2",
     "text-encoding": "^0.7.0",
